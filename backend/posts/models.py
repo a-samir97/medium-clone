@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from accounts.models import User
+from .managers import PostManager
 
 class Post(models.Model):
     """
@@ -21,6 +22,8 @@ class Post(models.Model):
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES)
     clapped = models.IntegerField(default=0)
+
+    posts = PostManager()
     
     class Meta:
         ordering = ('-publish',)
