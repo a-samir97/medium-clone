@@ -1,19 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-class SocialAccounts(models.Model):
-    facebook = models.URLField()
-    github = models.URLField()
-    twitter = models.URLField()
-    linkedin = models.URLField()
-
-    def __str__(self):
-        return self.facebook
-
 class User(AbstractUser):
     
-    accounts = models.ForeignKey(SocialAccounts, on_delete=models.DO_NOTHING, null=True, blank=True)
-    image = models.ImageField()
+    image = models.ImageField(null=True, blank=True)
     following = models.ManyToManyField (
         'self', 
         through='UserFollowing', 
@@ -22,6 +12,17 @@ class User(AbstractUser):
     )
     def __str__(self):
         return self.username
+
+class SocialAccounts(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='social_accounts', null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
+    github = models.URLField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username + " | " + self.facebook + " | " + self.github
 
 # Intermediate Model for many to mant relation
 class UserFollowing(models.Model):
