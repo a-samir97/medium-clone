@@ -27,8 +27,9 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES)
-    clapped = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag)
+    clapped = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
     
     posts = PostManager()
     
@@ -55,3 +56,18 @@ class Comment(models.Model):
     
     def __str__(self):
         return self.body
+
+class Upvote(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_likes')
+
+    def __str__(self):
+        return self.user.username + " likes " + self.post.title
+
+class Downvote(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_unlikes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_unlikes')
+
+
+    def __str__(self):
+        return self.user.username + " unlikes " + self.post.title
