@@ -68,7 +68,6 @@ class Downvote(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_unlikes')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_unlikes')
 
-
     def __str__(self):
         return self.user.username + " unlikes " + self.post.title
 
