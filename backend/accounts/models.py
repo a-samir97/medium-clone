@@ -22,7 +22,7 @@ class SocialAccounts(models.Model):
     linkedin = models.URLField(null=True, blank=True)
 
     def __str__(self):
-        return self.user.username + " | " + self.facebook + " | " + self.github
+        return self.user.username
 
 # Intermediate Model for many to mant relation
 class UserFollowing(models.Model):

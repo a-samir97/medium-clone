@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
+from rest_framework.authentication import TokenAuthentication
 
 from .models import User, SocialAccounts
 from .serializers import SignupSerializer
@@ -44,7 +46,6 @@ class LoginAPIView(APIView):
             - username
             - password
     '''
-
     def post(self, request):
         data = request.data
 
@@ -66,4 +67,46 @@ class LoginAPIView(APIView):
             return Response(
                 {'error': 'invalid credentials.'},
                 status=status.HTTP_404_NOT_FOUND
+            )
+
+class SocialAccountsAPIView(APIView):
+    '''
+        SocialAccounts API class for adding social accounts for existing user
+
+        params:
+            - Facebook
+            - GitHub
+            - Twitter
+            - Linkedin
+    '''
+    authentication_classes = (TokenAuthentication,)
+
+    def post(self, request):
+
+        if request.auth and request.user:
+            
+            data = request.data
+
+            if not data.get('facebook') and not data.get('github') \
+                and not data.get('twitter') and not data.get('linkedin'):
+
+                return Response(
+                    {"error": "at least you need to add one of them"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            user_accounts = SocialAccounts(
+                facebook=data.get('facebook'),
+                github=data.get('github'),
+                twitter=data.get('twitter'),
+                linkedin=data.get('linkedin'),
+                user=request.user
+            )  
+            user_accounts.save()
+
+            return Response({}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                {"error": "you are not authenticated user"},
+                status=status.HTTP_401_UNAUTHORIZED
             )
