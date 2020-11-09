@@ -10,7 +10,7 @@ class SocialAccountsSerializer(serializers.ModelSerializer):
 
 class SignupSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(style={'input_type': 'password'})
+    password = serializers.CharField(style={'input_type': 'password'}, min_length=8)
 
     class Meta:
         model = User
@@ -21,7 +21,7 @@ class SignupSerializer(serializers.ModelSerializer):
         user = User(
             username=validated_data['username'],
             email=validated_data['email'],
-            image=validated_data['image'] or None
+            image=validated_data.get('image') 
         )
         user.set_password(validated_data['password'])
         user.save()
