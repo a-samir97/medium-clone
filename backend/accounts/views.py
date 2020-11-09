@@ -20,7 +20,6 @@ class SignupAPIView(GenericAPIView):
             - email (required)
             - password (required)
             - image (optional)
-            - social accounts (optional), require URL 
     """
     serializer_class = SignupSerializer
 
