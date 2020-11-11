@@ -99,7 +99,7 @@ if os.getenv('BUILD_ON_TRAVIS', None):
 else:    
     
     # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = KEY
+    SECRET_KEY = os.getenv("SECRET_KEY")
     DEBUG = True
 
     DATABASES = {
