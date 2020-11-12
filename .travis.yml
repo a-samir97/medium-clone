@@ -1,0 +1,26 @@
+services:
+  - postgresql
+  
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+  
+env:
+  global:
+     - BUILD_ON_TRAVIS=true
+
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+
+  # command to run tests
+script:
+  - python3 backend/manage.py makemigrations accounts posts
+  - python3 backend/manage.py migrate
+  - python3 backend/manage.py test
+  
