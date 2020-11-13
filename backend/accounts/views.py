@@ -7,7 +7,6 @@ from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-from rest_framework.authentication import TokenAuthentication
 
 from .models import User, SocialAccounts
 from .serializers import SignupSerializer
@@ -22,6 +21,7 @@ class SignupAPIView(GenericAPIView):
             - image (optional)
     """
     serializer_class = SignupSerializer
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         data = request.data
@@ -45,6 +45,8 @@ class LoginAPIView(APIView):
             - username
             - password
     '''
+    permission_classes = (AllowAny,)
+
     def post(self, request):
         data = request.data
 
@@ -68,6 +70,14 @@ class LoginAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+class LogoutAPIView(APIView):
+
+    def post(self, request):
+
+        if request.auth and request.user:
+            Token.objects.get(user=request.user).delete()
+            return Response(status=status.HTTP_200_OK)
+            
 class SocialAccountsAPIView(APIView):
     '''
         SocialAccounts API class for adding social accounts for existing user
@@ -78,7 +88,6 @@ class SocialAccountsAPIView(APIView):
             - Twitter
             - Linkedin
     '''
-    authentication_classes = (TokenAuthentication,)
 
     def post(self, request):
 
