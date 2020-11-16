@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     # 3rd party apps
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'social_django',  # django social auth
+    'rest_social_auth',  # this package
+
 ]
 
 MIDDLEWARE = [
@@ -99,7 +102,7 @@ if os.getenv('BUILD_ON_TRAVIS', None):
 
 else:    
 
-    from .secrets import KEY
+    from .secrets import KEY, APP_ID, APP_SECRET
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = KEY
     DEBUG = True
@@ -110,13 +113,22 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
+    SOCIAL_AUTH_FACEBOOK_KEY = APP_ID
+    SOCIAL_AUTH_FACEBOOK_SECRET = APP_SECRET
+    SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication'
     ]
 }
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.facebook.FacebookOAuth2',
+    # and maybe some others ...
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
