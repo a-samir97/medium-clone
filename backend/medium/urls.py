@@ -20,5 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api/accounts/', include('accounts.urls', namespace='accounts')),
+    path('api/login/', include('rest_social_auth.urls_token')),
+
     #path('api/posts/', include('posts.urls', namespace='posts'))
 ]
