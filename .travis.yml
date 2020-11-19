@@ -21,7 +21,7 @@ install:
 
   # command to run tests
 script:
-  - python3 backend/manage.py makemigrations accounts posts
+  - python3 backend/manage.py makemigrations accounts posts comment collection tag vote 
   - python3 backend/manage.py migrate
   - python3 backend/manage.py test
   
