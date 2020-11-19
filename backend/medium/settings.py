@@ -35,6 +35,10 @@ INSTALLED_APPS = [
     # my apps
     'accounts',
     'posts',
+    'comment',
+    'tag',
+    'vote',
+    'collection',
     
     # 3rd party apps
     'corsheaders',
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'social_django',  # django social auth
     'rest_social_auth',  # this package
+    'drf_yasg',
 
 ]
 
