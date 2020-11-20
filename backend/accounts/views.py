@@ -1,14 +1,20 @@
+import uuid
 from django.contrib.auth import authenticate
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
 
-from .models import User, SocialAccounts
+from .models import (
+    User, 
+    SocialAccounts, 
+    ResetPasswordToken, 
+    ConfirmationEmailToken
+)
 from .serializers import SignupSerializer
 
 class SignupAPIView(GenericAPIView):
@@ -77,7 +83,55 @@ class LogoutAPIView(APIView):
         if request.auth and request.user:
             Token.objects.get(user=request.user).delete()
             return Response(status=status.HTTP_200_OK)
-            
+
+class EmailConfirmation(APIView):
+    def post(self, request):
+        pass
+
+class ResetPassword(APIView):
+
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request):
+        
+        # if the user doesn't put email 
+        if not request.data.get('email'):
+            return Response({"error": "please enter your email"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # if email doesn't exist in the database
+        if not User.objects.filter(email=request.data.get('email')).exists():
+            return Response({"error": "this email is not exist"}, status=status.HTTP_404_NOT_FOUND)
+
+        user = User.objects.get(email=request.data.get('email'))
+        
+        reset_token = ResetPasswordToken.objects.create(user=user)
+        reset_token.token = uuid.uuid4()
+
+        # send email to user
+        return Response({'token':reset_token.token}, status=status.HTTP_200_OK)
+
+
+class ConfirmPassword(APIView):
+
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, user_uuid):
+        
+        # check if uuid not exist in reset password tokens 
+        if not ResetPasswordToken.objects.filter(token=user_uuid):
+            return Response({"error": "invalid user"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # if user doesn't put password 
+        if not request.data.get('password'):
+            return Response({"error": "please enter new password"}, status=status.HTTP_400_BAD_REQUEST)
+
+        password = request.data.get('password')
+
+        user = ResetPasswordToken.objects.get(token=user_uuid).user
+        user.set_password(password)
+        user.save()
+        ResetPasswordToken.objects.get(token=user_uuid).delete()
+        return Response({"data": "Password Changed Successfully."}, status=status.HTTP_201_CREATED)
+
 class SocialAccountsAPIView(APIView):
     '''
         SocialAccounts API class for adding social accounts for existing user

@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     
     image = models.ImageField(null=True, blank=True)
+    email_confirmed = models.BooleanField(default=False)
     following = models.ManyToManyField (
         'self', 
         through='UserFollowing', 
@@ -32,3 +33,19 @@ class UserFollowing(models.Model):
 
     def __str__(self):
         return self.user_follow.username + " follow " + self.user_followed.username
+
+
+class ResetPasswordToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.UUIDField()
+
+    def __str__(self):
+        return self.user.username
+
+
+class ConfirmationEmailToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.UUIDField()
+
+    def __str__(self):
+        return self.user.username
