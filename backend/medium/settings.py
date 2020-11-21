@@ -107,19 +107,25 @@ if os.getenv('BUILD_ON_TRAVIS', None):
 
 else:    
 
-    from .secrets import KEY, APP_ID, APP_SECRET
+    from . import secrets
+
     # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = KEY
+    SECRET_KEY = secrets.KEY
     DEBUG = True
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': secrets.DB_NAME, 
+            'USER': secrets.DB_USER, 
+            'PASSWORD': secrets.DB_PASSWORD,
+            'HOST': secrets.DB_HOST, 
+            'PORT': secrets.DB_PORT,
         }
     }
-    SOCIAL_AUTH_FACEBOOK_KEY = APP_ID
-    SOCIAL_AUTH_FACEBOOK_SECRET = APP_SECRET
+
+    SOCIAL_AUTH_FACEBOOK_KEY = secrets.APP_ID
+    SOCIAL_AUTH_FACEBOOK_SECRET = secrets.APP_SECRET
     SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', ]  # optional
 
 REST_FRAMEWORK = {
