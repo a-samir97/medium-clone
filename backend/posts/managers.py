@@ -13,7 +13,7 @@ class PostManager(Manager):
         '''
             Get the recent 10 posts 
         '''
-        return self.order_by('publish')[:10]
+        return self.order_by('-publish')[:10]
     
 
     def get_most_clapped_posts(self):
