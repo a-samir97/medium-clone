@@ -33,6 +33,7 @@ urlpatterns = [
    path('api-posts/', include('posts.urls', namespace='posts')),
    path('api-tags/', include('tag.urls', namespace='tags')),
    path('api-comments/', include('comment.urls', namespace='comments')),
+   path('api-vote/', include('vote.urls', namespace='votes')),
    
    # Swagger documentation
    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
