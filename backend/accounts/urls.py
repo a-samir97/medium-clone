@@ -10,4 +10,7 @@ urlpatterns = [
     path('logout/', views.LogoutAPIView.as_view(), name='logout'),
     path('reset-password/', views.ResetPassword.as_view(), name='reset-password'),
     path('confirm-password/<uuid:user_uuid>/', views.ConfirmPassword.as_view(), name='confirm-password'),
+    path('toggle-follow/<str:username>/', views.ToggleFollowAPIView.as_view(), name='toggle-follow'),
+    path('following-users/', views.FollowingAPIView.as_view(), name='following-users'),
+    path('followers-users/', views.FollowersAPIView.as_view(), name='followers-users'),
 ]
