@@ -20,18 +20,21 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    path('api/accounts/', include('accounts.urls', namespace='accounts')),
-    path('api/login/', include('rest_social_auth.urls_token')),
-    
-    # JWT
-    path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
-    path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    
-    path('api/posts/', include('posts.urls', namespace='posts')),
+   path('admin/', admin.site.urls),
 
-    # Swagger documentation
-    path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   path('api-accounts/', include('accounts.urls', namespace='accounts')),
+   path('api-login/', include('rest_social_auth.urls_token')),
+   
+   # JWT
+   path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
+   path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+   
+   path('api-posts/', include('posts.urls', namespace='posts')),
+   path('api-tags/', include('tag.urls', namespace='tags')),
+   path('api-comments/', include('comment.urls', namespace='comments')),
+   
+   # Swagger documentation
+   path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]

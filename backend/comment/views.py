@@ -10,6 +10,8 @@ from .serializers import CommentSerializer
 
 class CommentViewSetAPI(viewsets.ModelViewSet):
 
+    serializer_class = CommentSerializer
+
     def list(self, request, post_id):
         post = Post.objects.filter(id=post_id).first()
 
@@ -34,16 +36,11 @@ class CommentViewSetAPI(viewsets.ModelViewSet):
         comment = Comment.objects.filter(id=comment_id).first()
         if comment:
             comment_serializer = CommentSerializer(comment)
-            if serializer_class.is_valid():
-                return Response(
-                    {"data": comment_serializer.data},
-                    status=status.HTTP_200_OK
-                )
-            else:
-                return Response(
-                    {"error": comment_serializer.errors},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            return Response(
+                {"data": comment_serializer.data},
+                status=status.HTTP_200_OK
+            )
+
         else:
             return Response(
                     {"error": 'comment is not found'},
@@ -73,11 +70,32 @@ class CommentViewSetAPI(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+    def partial_update(self, request, comment_id):
+        comment = Comment.objects.filter(id=comment_id).first()
+        if comment:
+            comment_serializer = CommentSerializer(instance=comment, data=request.data)
+            if comment_serializer.is_valid():
+                return Response(
+                    {"data": comment_serializer.data},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {"data": comment_serializer.errors},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                    {"data": "comment is not found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
     def update(self, request, comment_id):
         comment = Comment.objects.filter(id=comment_id).first()
         if comment:
             comment_serializer = CommentSerializer(instance=comment, data=request.data)
             if comment_serializer.is_valid():
+                comment_serializer.save()
                 return Response(
                     {"data": comment_serializer.data},
                     status=status.HTTP_200_OK

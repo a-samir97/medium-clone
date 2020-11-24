@@ -4,4 +4,5 @@ from .models import Comment
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        exclude = ('author', 'post') 
+        fields = '__all__'
+#        exclude = ('author', 'post') 

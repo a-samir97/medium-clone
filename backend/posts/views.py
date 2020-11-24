@@ -37,8 +37,8 @@ class LatestPostListAPI(ListAPIView):
     serializer_class = PostSerializer
     permission_classes = (permissions.AllowAny,)
 
-class ClappPostsAPI(APIView):
-    permission_classes = (permissions.AllowAny,)
+class ClappPostAPI(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request, id):
         post = get_object_or_404(Post, id=id)
@@ -49,7 +49,6 @@ class ClappPostsAPI(APIView):
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.posts.get_published_posts()
-    serializer_class = PostSerializer
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):

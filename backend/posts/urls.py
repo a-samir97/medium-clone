@@ -7,7 +7,7 @@ from .views import (
     LatestPostListAPI,
     UserPublishedPostsListAPI,
     UserDraftedPostsListAPI,
-    ClappPostsAPI
+    ClappPostAPI
 )
 
 app_name = 'posts'
@@ -21,7 +21,7 @@ urlpatterns = [
     path('latest/', LatestPostListAPI.as_view(), name='latest-posts'),
     path('published/', UserPublishedPostsListAPI.as_view(), name='published-posts'),
     path('drafted/', UserDraftedPostsListAPI.as_view(), name='drafted-posts'),
-    path('clapp/<int:id>/', ClappPostsAPI.as_view(), name='clapp-post'),
+    path('clapp/<int:id>/', ClappPostAPI.as_view(), name='clapp-post'),
 
 ] + router.urls
 
