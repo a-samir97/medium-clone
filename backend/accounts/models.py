@@ -32,7 +32,7 @@ class UserFollowing(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user_follow.username + " follow " + self.user_followed.username
+        return self.user_following.username + " follow " + self.user_followed.username
 
 
 class ResetPasswordToken(models.Model):

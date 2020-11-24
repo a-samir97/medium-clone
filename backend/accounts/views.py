@@ -15,7 +15,7 @@ from .models import (
     ResetPasswordToken, 
     ConfirmationEmailToken
 )
-from .serializers import SignupSerializer
+from .serializers import SignupSerializer, ShowUserSerializer
 
 class SignupAPIView(GenericAPIView):
     """
@@ -172,3 +172,63 @@ class SocialAccountsAPIView(APIView):
                 {"error": "you are not authenticated user"},
                 status=status.HTTP_401_UNAUTHORIZED
             )
+
+
+class ToggleFollowAPIView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, username):
+
+        current_user = request.user
+
+        # error 
+        if current_user.username == username:
+            pass
+        
+        user = User.objects.filter(username=username).first()
+
+        if user:
+            if user in current_user.following.all():
+                current_user.following.remove(user)
+                current_user.save()
+
+                return Response(
+                    {'data': 'user unfollowed !'},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                current_user.following.add(user)
+                current_user.save()
+                
+                return Response(
+                    {'data': 'user followed !'},
+                    status=status.HTTP_200_OK
+                )            
+        else:
+            return Response(
+                {"error": "user is not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class FollowingAPIView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        queryset = self.request.user.following.all()
+        serializer = ShowUserSerializer(queryset, many=True)
+        return Response(
+            {'data': serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+class FollowersAPIView(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        quyertset = self.request.user.followers.all()
+        serializer = ShowUserSerializer(quyertset, many=True)
+        return Response(
+            {'data': serializer.data},
+            status=status.HTTP_200_OK
+        )
