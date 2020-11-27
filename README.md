@@ -13,3 +13,15 @@
 - User can downvote post 
 - User can clap for a post
 - User can make collection of post (saved post)
+
+
+## Tools 
+- Back-end
+  - Python 3  
+  - Django 
+  - Django Rest Framework
+  - Swagger Documentation 
+  - Postgres Database 
+  - JWT for Authentication and Authorization
+- Front-end 
+  - React JS
