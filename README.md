@@ -12,3 +12,4 @@
 - User can upvote post 
 - User can downvote post 
 - User can clap for a post
+- User can make collection of post (saved post)
