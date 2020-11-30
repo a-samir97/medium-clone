@@ -8,7 +8,7 @@ from rest_framework.renderers import BrowsableAPIRenderer
 from rest_framework.generics import GenericAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny
-
+from rest_framework import authentication
 from .models import (
     User, 
     SocialAccounts, 
@@ -28,7 +28,7 @@ class SignupAPIView(GenericAPIView):
     """
     serializer_class = SignupSerializer
     permission_classes = (AllowAny,)
-
+    authentication_classes = ()
     def post(self, request):
         data = request.data
 
