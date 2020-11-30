@@ -3,17 +3,19 @@ import {
   Input, 
   Button, 
   Checkbox, 
-  Divider,
-Typography 
 } from 'antd';
+
+import axiosInstance from '../../Api/axiosAPI'
+
 const layout = {
   labelCol: {
     span: 8,
   },
   wrapperCol: {
-    span: 16,
+    span: 8,
   },
 };
+
 const tailLayout = {
   wrapperCol: {
     offset: 8,
@@ -21,10 +23,20 @@ const tailLayout = {
   },
 };
 
-const {Title} = Typography
 export const LoginComponent = () => {
+
   const onFinish = (values) => {
-    console.log('Success:', values);
+      const response = axiosInstance.post('/token/obtain/', {
+        username:values.username,
+        password:values.password
+      }).then(result => {
+        axiosInstance.defaults.headers['Authorization'] = "JWT " + result.data.access;
+        localStorage.setItem('access_token', result.data.access)
+        localStorage.setItem('refresh_token', result.data.refresh)
+      }).catch(error => {
+        throw error
+      })
+ 
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -41,9 +53,8 @@ export const LoginComponent = () => {
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      style={{marginTop:10}}
     >
-      <Title level={2}>Login</Title>
-      <Divider/>
       <Form.Item
         label="Username"
         name="username"
