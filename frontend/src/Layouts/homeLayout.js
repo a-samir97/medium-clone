@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { MenuComponent } from '../Components/navbarComponent'
+import { MenuComponent } from '../Components/Navbar/navbarComponent'
 import { Layout, Menu } from 'antd';
 import { UserOutlined, LaptopOutlined } from '@ant-design/icons';
 
@@ -12,10 +12,6 @@ export class HomeLayout extends Component {
         return (
 
     <Layout>
-    <Header className="header">
-      <div className="logo" />
-            <MenuComponent></MenuComponent>
-    </Header>
     <Layout>
       <Sider width={200} className="site-layout-background">
         <Menu
@@ -24,17 +20,11 @@ export class HomeLayout extends Component {
           defaultOpenKeys={['sub1']}
           style={{ height: '100%', borderRight: 0 }}
         >
-          <SubMenu key="sub1" icon={<UserOutlined />} title="Following">
-            <Menu.Item key="1">option1</Menu.Item>
-            <Menu.Item key="2">option2</Menu.Item>
-            <Menu.Item key="3">option3</Menu.Item>
-            <Menu.Item key="4">option4</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" icon={<LaptopOutlined />} title="Blogs">
-            <Menu.Item key="5">option5</Menu.Item>
-            <Menu.Item key="6">option6</Menu.Item>
-            <Menu.Item key="7">option7</Menu.Item>
-            <Menu.Item key="8">option8</Menu.Item>
+          <SubMenu key="sub1" icon={<LaptopOutlined />} title="Blogs">
+            <Menu.Item key="1">First Blog</Menu.Item>
+            <Menu.Item key="2">Second Blog</Menu.Item>
+            <Menu.Item key="3">Third Blog</Menu.Item>
+            <Menu.Item key="4">Forth Blog</Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

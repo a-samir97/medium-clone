@@ -2,12 +2,9 @@ import React from 'react';
 import {
   Form,
   Input,
-  Button,
-  Divider,
-  Typography
+  Button
 } from 'antd';
-
-const { Title } = Typography;
+import axiosInstance from '../../Api/axiosAPI'
 
 const formItemLayout = {
   labelCol: {
@@ -23,7 +20,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 16,
+      span: 8,
     },
   },
 };
@@ -45,7 +42,18 @@ export const RegistrationForm = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+
+    const response = axiosInstance.post("/api-accounts/signup/", {
+      username:values.username,
+      email:values.email,
+      password:values.password
+    
+    }).then(result => {
+      console.log(result.data)
+    
+    }).catch(error => {
+      throw error
+    })
   };
 
   return (
@@ -55,17 +63,12 @@ export const RegistrationForm = () => {
       name="register"
       onFinish={onFinish}
       scrollToFirstError
+      style={{marginTop:10}}
     >
-        <Title level={2}>Signup</Title>
-        <Divider/>
         <Form.Item
             name="username"
             label="Username"
             rules={[
-            {
-                type: 'username',
-                message: 'The input is not valid username!',
-            },
             {
                 required: true,
                 message: 'Please input your username!',
