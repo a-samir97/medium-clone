@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.com/a-samir97/medium-clone.svg?branch=main)](https://travis-ci.com/a-samir97/medium-clone)
 
+## Database ERD
+![Database ERD](backend/docs/database_erd.png)
+
 ## Features
 
 - User signup, login
