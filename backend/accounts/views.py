@@ -29,6 +29,7 @@ class SignupAPIView(GenericAPIView):
     serializer_class = SignupSerializer
     permission_classes = (AllowAny,)
     authentication_classes = ()
+
     def post(self, request):
         data = request.data
 
@@ -52,6 +53,7 @@ class LoginAPIView(APIView):
             - password
     '''
     permission_classes = (AllowAny,)
+    authentication_classes = ()
 
     def post(self, request):
         data = request.data
@@ -108,7 +110,6 @@ class ResetPassword(APIView):
 
         # send email to user
         return Response({'token':reset_token.token}, status=status.HTTP_200_OK)
-
 
 class ConfirmPassword(APIView):
 
@@ -173,7 +174,6 @@ class SocialAccountsAPIView(APIView):
                 status=status.HTTP_401_UNAUTHORIZED
             )
 
-
 class ToggleFollowAPIView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -209,7 +209,6 @@ class ToggleFollowAPIView(APIView):
                 {"error": "user is not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-
 
 class FollowingAPIView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
