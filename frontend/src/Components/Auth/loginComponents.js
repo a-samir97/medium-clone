@@ -2,10 +2,13 @@ import {
   Form, 
   Input, 
   Button, 
-  Checkbox, 
+  Checkbox,
+  message
 } from 'antd';
 
 import axiosInstance from '../../Api/axiosAPI'
+import { messageHandler } from '../Messages/baseMessage'
+import { useHistory } from 'react-router-dom'
 
 const layout = {
   labelCol: {
@@ -25,16 +28,27 @@ const tailLayout = {
 
 export const LoginComponent = () => {
 
+  let history = useHistory()
+
   const onFinish = (values) => {
       const response = axiosInstance.post('/token/obtain/', {
         username:values.username,
         password:values.password
       }).then(result => {
+        // store authentication in localstorage
         axiosInstance.defaults.headers['Authorization'] = "JWT " + result.data.access;
         localStorage.setItem('access_token', result.data.access)
         localStorage.setItem('refresh_token', result.data.refresh)
+
+        // display success message to the user         
+        message.success('User is logged in successfully!');
+
+        // redirect to the homepage
+        history.push("/")
+
       }).catch(error => {
-        throw error
+        // display error message to the user 
+        message.error('User can not login, please try again');
       })
  
   };
