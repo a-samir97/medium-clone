@@ -2,9 +2,12 @@ import React from 'react';
 import {
   Form,
   Input,
-  Button
+  Button,
+  message
 } from 'antd';
 import axiosInstance from '../../Api/axiosAPI'
+import { messageHandler } from '../Messages/baseMessage'
+import { useHistory } from 'react-router-dom'
 
 const formItemLayout = {
   labelCol: {
@@ -40,6 +43,7 @@ const tailFormItemLayout = {
 
 export const RegistrationForm = () => {
   const [form] = Form.useForm();
+  const history = useHistory()
 
   const onFinish = (values) => {
 
@@ -49,10 +53,17 @@ export const RegistrationForm = () => {
       password:values.password
     
     }).then(result => {
-      console.log(result.data)
-    
+  
+      // show success message to the user
+      message.success("User is created successfully!")
+
+      // redirect to login page 
+      history.push('/login/')
+
     }).catch(error => {
-      throw error
+      // show error message to the user
+      message.error("User is not created, please try again")
+      
     })
   };
 
