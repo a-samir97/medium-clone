@@ -44,4 +44,7 @@ class Post(models.Model):
         if not self.id:
             self.slug = slugify(self.title)
 
+        if self.status == 'P':
+            self.publish = timezone.now()
+            
         super(Post, self).save(*args, **kwargs)
