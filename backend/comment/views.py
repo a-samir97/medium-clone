@@ -3,14 +3,30 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 
-from .models import Comment
 from posts.models import Post
 
-from .serializers import CommentSerializer
+from .serializers import CommentSerializer, CommentCreattionSerializer
+from .models import Comment
+from .permissions import IsOwner
 
 class CommentViewSetAPI(viewsets.ModelViewSet):
 
-    serializer_class = CommentSerializer
+    def get_permissions(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            permission_classes = (permissions.AllowAny,)
+        
+        elif self.action == 'create':
+            permission_classes = (permissions.IsAuthenticated,)
+        
+        else:
+            permission_classes = (permissions.IsAuthenticated, IsOwner)
+        return [permission() for permission in permission_classes]
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'retrieve':
+            return CommentSerializer
+        else:
+            return CommentCreattionSerializer
 
     def list(self, request, post_id):
         post = Post.objects.filter(id=post_id).first()
@@ -52,9 +68,9 @@ class CommentViewSetAPI(viewsets.ModelViewSet):
 
         post = Post.objects.filter(id=post_id).first()
         if post:
-            comment_serializer = CommentSerializer(data=request.data)
+            comment_serializer = CommentCreattionSerializer(data=request.data)
             if comment_serializer.is_valid():
-                comment_serializer.save()
+                comment_serializer.save(post=post, author=request.user)
                 return Response(
                     {"data": comment_serializer.data},
                     status=status.HTTP_201_CREATED
@@ -73,7 +89,7 @@ class CommentViewSetAPI(viewsets.ModelViewSet):
     def partial_update(self, request, comment_id):
         comment = Comment.objects.filter(id=comment_id).first()
         if comment:
-            comment_serializer = CommentSerializer(instance=comment, data=request.data)
+            comment_serializer = CommentCreattionSerializer(instance=comment, data=request.data)
             if comment_serializer.is_valid():
                 return Response(
                     {"data": comment_serializer.data},
@@ -93,7 +109,7 @@ class CommentViewSetAPI(viewsets.ModelViewSet):
     def update(self, request, comment_id):
         comment = Comment.objects.filter(id=comment_id).first()
         if comment:
-            comment_serializer = CommentSerializer(instance=comment, data=request.data)
+            comment_serializer = CommentCreattionSerializer(instance=comment, data=request.data)
             if comment_serializer.is_valid():
                 comment_serializer.save()
                 return Response(

@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework import viewsets
-from rest_framework import permissions
+from rest_framework import viewsets, permissions, status 
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import ListAPIView
@@ -12,6 +11,7 @@ from .serializers import (
     PostSerializer,
     PostCreationSerializer
 )
+from .permissions import IsOwner
 
 class UserPublishedPostsListAPI(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -52,24 +52,34 @@ class PostViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return PostCreationSerializer
-        else:
+        if self.action == 'list' or self.action == 'retrieve':
             return PostSerializer
+        else:
+            return PostCreationSerializer
 
     def get_permissions(self):
         if self.action == 'list' or self.action == 'retrieve':
             permission_classes = (permissions.AllowAny,)
 
-        elif self. action == 'create' or self.action == 'update' or \
-                self.action == 'destroy' or self.action == 'partial_update':
+        elif self. action == 'create':
             permission_classes = (permissions.IsAuthenticated,)
+
+        elif self.action == 'update' or self.action == 'destroy' or \
+            self.action == 'partial_update':
+            permission_classes = (permissions.IsAuthenticated, IsOwner)
         
         else:
             permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
         
         return [permission() for permission in permission_classes]
 
+    def create(self, request):
+        serializer = PostCreationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, satus=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
         post = get_object_or_404(Post, pk=pk)
