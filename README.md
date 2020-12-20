@@ -19,6 +19,7 @@
 
 
 ## Tools 
+
 - Back-end
   - Python 3  
   - Django 
@@ -26,5 +27,7 @@
   - Swagger Documentation 
   - Postgres Database 
   - JWT for Authentication and Authorization
+  - Sentry
+  
 - Front-end 
   - React JS
