@@ -13,6 +13,19 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_sdk.init(
+    dsn="https://a174aa468d024abeac7f5e2a0e326ec8@o494012.ingest.sentry.io/5564202",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,12 +61,13 @@ INSTALLED_APPS = [
     'social_django',  # django social auth
     'rest_social_auth',  # this package
     'drf_yasg',
-
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -201,3 +215,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+INTERNAL_IPS = [
+  
+    '127.0.0.1',
+]
