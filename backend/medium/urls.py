@@ -33,8 +33,8 @@ urlpatterns = [
    path('api/login/', include('rest_social_auth.urls_token')),
    
    # JWT
-   path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
-   path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
+   path('api/token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
+   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
    
    path('api/posts/', include('posts.urls', namespace='posts')),
    path('api/tags/', include('tag.urls', namespace='tags')),
