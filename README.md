@@ -28,6 +28,7 @@
   - Postgres Database 
   - JWT for Authentication and Authorization
   - Sentry
+  - Docker
   
 - Front-end 
   - React JS
