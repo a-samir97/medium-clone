@@ -7,8 +7,10 @@ class CreateCollectionSerializer(serializers.ModelSerializer):
         model = Collection
         exclude = ('created_at', 'updated_at', 'user')
 
+
 class ShowCollectionSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
+
     class Meta:
         model = Collection
         fields = "__all__"

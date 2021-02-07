@@ -8,4 +8,4 @@ router = DefaultRouter()
 
 router.register("", CollectionViewSet, basename='collection')
 
-urlpatterns  = router.urls
+urlpatterns = router.urls
