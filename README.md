@@ -29,6 +29,7 @@
   - JWT for Authentication and Authorization
   - Sentry
   - Docker
+  - Flake8, Pep8
   
 - Front-end 
   - React JS
