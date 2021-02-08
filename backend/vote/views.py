@@ -5,6 +5,7 @@ from rest_framework import status, permissions
 from .models import Downvote, Upvote
 from posts.models import Post
 
+
 class ToggleUpvoteAPIView(APIView):
 
     permission_classes = (permissions.IsAuthenticated,)
@@ -31,6 +32,7 @@ class ToggleUpvoteAPIView(APIView):
                 {"error": "post is not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
+
 
 class ToggleDownvoteAPIView(APIView):
 
@@ -59,6 +61,7 @@ class ToggleDownvoteAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
 class UpvotePostCountsAPIView(APIView):
 
     permission_classes = (permissions.AllowAny,)
@@ -76,10 +79,11 @@ class UpvotePostCountsAPIView(APIView):
                 {"error": "post is not found"},
                 status=status.HTTP_404_NOT_FOUND
             )
-    
+
+
 class DownvotePostCountsAPIView(APIView):
 
-    permission_classes =(permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny,)
 
     def get(self, request, post_id):
         post = Post.objects.filter(id=post_id).first()
