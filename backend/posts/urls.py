@@ -17,12 +17,19 @@ router = DefaultRouter()
 router.register('', PostViewSet, basename='posts')
 
 urlpatterns = [
-    path('most-clapped/', MostClappedPostListAPI.as_view(), name='most-clapped'),
-    path('latest/', LatestPostListAPI.as_view(), name='latest-posts'),
-    path('published/', UserPublishedPostsListAPI.as_view(), name='published-posts'),
-    path('drafted/', UserDraftedPostsListAPI.as_view(), name='drafted-posts'),
-    path('clapp/<int:id>/', ClappPostAPI.as_view(), name='clapp-post'),
+    path('most-clapped/',
+         MostClappedPostListAPI.as_view(), name='most-clapped'),
+
+    path('latest/',
+         LatestPostListAPI.as_view(), name='latest-posts'),
+
+    path('published/',
+         UserPublishedPostsListAPI.as_view(), name='published-posts'),
+
+    path('drafted/',
+         UserDraftedPostsListAPI.as_view(), name='drafted-posts'),
+
+    path('clapp/<int:id>/',
+         ClappPostAPI.as_view(), name='clapp-post'),
 
 ] + router.urls
-
-

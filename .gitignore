@@ -131,4 +131,6 @@ dmypy.json
 # secrets
 secrets.py
 
-migrations/
+# for vscode settings config
+.vscode
+

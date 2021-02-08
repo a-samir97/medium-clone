@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
-    User, 
-    UserFollowing, 
+    User,
+    UserFollowing,
     SocialAccounts,
     ResetPasswordToken,
     ConfirmationEmailToken

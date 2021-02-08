@@ -7,7 +7,6 @@ from tag.models import Tag
 from .managers import PostManager
 
 
-    
 class Post(models.Model):
     """
         Model for Post Table
@@ -18,7 +17,8 @@ class Post(models.Model):
         ("P", "Published")
     )
 
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='posts')
     title = models.CharField(max_length=30)
     slug = models.SlugField(max_length=30, unique_for_date='publish')
     body = models.TextField()
@@ -30,15 +30,14 @@ class Post(models.Model):
     clapped = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
 
-    objects = models.Manager() # Default Manager 
+    objects = models.Manager()  # Default Manager
     posts = PostManager()
-    
+
     class Meta:
         ordering = ('-publish',)
-    
+
     def __str__(self):
         return self.title
-
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -46,5 +45,5 @@ class Post(models.Model):
 
         if self.status == 'P':
             self.publish = timezone.now()
-            
+
         super(Post, self).save(*args, **kwargs)

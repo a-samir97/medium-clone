@@ -11,40 +11,49 @@ from rest_framework_simplejwt import views as jwt_views
 import debug_toolbar
 
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Medium API",
-      default_version='v1',
-      description="Cloning Medium website",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],
+    openapi.Info(
+        title="Medium API",
+        default_version='v1',
+        description="Cloning Medium website",
+        contact=openapi.Contact(email="a.samir9710@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
 )
 
 
 urlpatterns = [
 
-   path('admin/', admin.site.urls),
-   
-   path('debug/', include(debug_toolbar.urls)),
+    path('admin/', admin.site.urls),
 
-   path('api/accounts/', include('accounts.urls', namespace='accounts')),
-   path('api/login/', include('rest_social_auth.urls_token')),
-   
-   # JWT
-   path('api/token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),  # override sjwt stock token
-   path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-   
-   path('api/posts/', include('posts.urls', namespace='posts')),
-   path('api/tags/', include('tag.urls', namespace='tags')),
-   path('api/comments/', include('comment.urls', namespace='comments')),
-   path('api/vote/', include('vote.urls', namespace='votes')),
-   path('api/collections/', include('collection.urls', namespace='collections')),
+    path('debug/', include(debug_toolbar.urls)),
 
-   
-   # Swagger documentation
-   path('docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   path('', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('api/accounts/', include('accounts.urls', namespace='accounts')),
+    path('api/login/', include('rest_social_auth.urls_token')),
 
+    # JWT
+    path('api/token/obtain/', jwt_views.TokenObtainPairView.as_view(),
+         name='token_create'),  # override sjwt stock token
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),
+         name='token_refresh'),
+
+    path('api/posts/', include('posts.urls', namespace='posts')),
+    path('api/tags/', include('tag.urls', namespace='tags')),
+    path('api/comments/', include('comment.urls', namespace='comments')),
+    path('api/vote/', include('vote.urls', namespace='votes')),
+    path('api/collections/',
+         include('collection.urls', namespace='collections')),
+
+
+    # Swagger documentation
+    path('docs/', schema_view.with_ui(
+        'swagger',
+        cache_timeout=0),
+        name='schema-swagger-ui'),
+
+    path('', schema_view.with_ui(
+        'redoc',
+        cache_timeout=0),
+        name='schema-redoc'),
 ]

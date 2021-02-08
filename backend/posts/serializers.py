@@ -1,16 +1,16 @@
 from rest_framework import serializers
 from .models import Post
 
-from accounts.serializers import ShowUserSerializer
 
 class PostCreationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         exclude = (
-            'slug', 'views', 
+            'slug', 'views',
             'clapped', 'author',
             'publish'
-            )
+        )
+
 
 class PostSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
